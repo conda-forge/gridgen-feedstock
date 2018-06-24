@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/sakov/gridgen-c/archive/{{ commit }}.tar.gz
-  sha256: 5a47e5299316269b85a4fdfe01b8cc42e5422176b83767826c3a7d7cc982bad4
+  sha256: d683776613e1f3d614438699f269581ee34f4ed636c2bf612f85c99ee0a2f65b
 
 build:
   number: 0
