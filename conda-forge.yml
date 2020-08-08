@@ -1,8 +1,4 @@
-appveyor:
-  secure: {BINSTAR_TOKEN: tumuXLL8PU75WMnRDemRy02ruEq2RpNxeK3dz0MjFssnosPm2v4EFjfNB4PTotA1}
 compiler_stack: comp7
 max_py_ver: '37'
 max_r_ver: '35'
-travis:
-  secure: {BINSTAR_TOKEN: hBNR/16QeU5Cf5G3oRnP+3OcTWmA1eNvlOeh45HNRxNm1aIO1iwRVnyJ4JF29X/E16kq5xUy8Rmc+Gi+50tEvnqx/urMMmDzbryOpPOZJ+1zYMBPZCAw9w4m1yXmb7ACbNr0r7TL+qWJRWm8IGYNgW+tuwDawq6p3kWIxuxnO+/6J76uTofNIgoshEwVfYu/nrUIPr0iNTHdfCxJ6gQXUjh+3zXdV25bJUhR0/fgRQu/yhT9/+MIHu8RudWdAGoWbAIAflMWyKaPoJZu7KlqGnPE+NZSqRVMuIBtG1iqSJs8lkWyIRrBB1muIldCFg/P//RC08ukOy/9IyeP1+qZfs2YBBZufl8B/Qr8GHJH/YN65FXe+5ibb0RkU4CWNoopg4b3paj2FMbJqK/dDMBZ4t9bYlkhNb0lXpvoZO+CagM2f3KA7XoG+rkTJY/BgSzFIkLVUA/uy6p+yeWqb07sCvVrvHAGzmpfzoNnW9S8wQhQRogL+u/4DGMY8jel9PIoHg9hchlIpFEmtNLwufVIY7djK9Hr6v4OLnu2olXIDnKBJZZqgJOd6uu8ksv4WBAEt5xgOuJFRrGFTno+uap5MNNjRHIfcX0GoPEhoVn664MnBmfdipOFpNj58DKNhMF2/65xUqNxykfhrf7O5RC80HYG9jR25nl50UCeyPPBS4w=}
 conda_forge_output_validation: true
