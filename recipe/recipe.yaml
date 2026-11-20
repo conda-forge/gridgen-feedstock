@@ -13,14 +13,24 @@ source:
   sha256: d683776613e1f3d614438699f269581ee34f4ed636c2bf612f85c99ee0a2f65b
 
 build:
-  number: 1001
-  skip: win
+  number: 1002
+  script:
+    file: ${{ 'bld.bat' if win else 'build.sh' }}
 
 requirements:
   build:
-    - ${{ compiler('c') }}
-    - ${{ stdlib('c') }}
-    - make
+    - if: unix
+      then:
+        - ${{ compiler('c') }}
+        - ${{ stdlib('c') }}
+        - make
+    - if: win
+      then:
+        # Upstream uses C99 complex arithmetic and GNU C extensions.
+        - ${{ compiler('m2w64_c') }}
+        - ${{ stdlib('m2w64_c') }}
+        - cmake
+        - ninja
   host:
     - gridutils
   run:
@@ -38,10 +48,24 @@ tests:
       # upstream's makefile installs libgridgen.so on all platforms (not
       # .dylib on macOS), so use literal paths instead of `lib: [gridgen]`
       files:
-        - lib/libgridgen.a
-        - lib/libgridgen.so
+        - if: unix
+          then:
+            - lib/libgridgen.a
+            - lib/libgridgen.so
+        - if: win
+          then:
+            - Library/bin/gridgen.dll
+            - Library/lib/libgridgen.dll.a
+            - Library/lib/libgridgen.a
+            - Library/include/gridgen_config.h
   - script:
       - gridgen -h
+  - if: win
+    then:
+      script: test_windows.py
+      requirements:
+        run:
+          - python
 
 about:
   homepage: https://github.com/sakov/gridgen-c
