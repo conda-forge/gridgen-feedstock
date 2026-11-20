@@ -1,0 +1,54 @@
+schema_version: 1
+
+context:
+  version: "1.51.5"
+  commit: f6b28d632545cc4806c2619627c6350cd8a10f7a
+
+package:
+  name: gridgen
+  version: ${{ version }}
+
+source:
+  url: https://github.com/sakov/gridgen-c/archive/${{ commit }}.tar.gz
+  sha256: d683776613e1f3d614438699f269581ee34f4ed636c2bf612f85c99ee0a2f65b
+
+build:
+  number: 1001
+  skip: win
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+    - make
+  host:
+    - gridutils
+  run:
+    # gridutils has no run_exports, so it must be listed explicitly
+    - gridutils
+  run_exports:
+    - ${{ pin_subpackage('gridgen', upper_bound='x.x') }}
+
+tests:
+  - package_contents:
+      bin:
+        - gridgen
+      include:
+        - gridgen.h
+      # upstream's makefile installs libgridgen.so on all platforms (not
+      # .dylib on macOS), so use literal paths instead of `lib: [gridgen]`
+      files:
+        - lib/libgridgen.a
+        - lib/libgridgen.so
+  - script:
+      - gridgen -h
+
+about:
+  homepage: https://github.com/sakov/gridgen-c
+  license: LicenseRef-gridgen AND LicenseRef-Triangle
+  license_file: gridgen/LICENSE
+  summary: Non-interactive generation of multi-corner quasi-orthogonal grids inside simply connected polygonal regions.
+
+extra:
+  recipe-maintainers:
+    - ocefpaf
