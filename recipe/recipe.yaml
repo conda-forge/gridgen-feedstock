@@ -11,6 +11,9 @@ package:
 source:
   url: https://github.com/sakov/gridgen-c/archive/${{ commit }}.tar.gz
   sha256: d683776613e1f3d614438699f269581ee34f4ed636c2bf612f85c99ee0a2f65b
+  patches:
+    # Triangle casts pointers to unsigned long, which is 32-bit on win-64
+    - patches/use-uintptr_t-for-pointer-arithmetic-in-triangle.patch
 
 build:
   number: 1001
