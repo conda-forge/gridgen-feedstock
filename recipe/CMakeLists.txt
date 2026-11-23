@@ -53,7 +53,7 @@ set_target_properties(gridgen_shared PROPERTIES OUTPUT_NAME gridgen)
 # only provides a static library on Windows, and consumers such as pygridgen
 # call them through gridgen's library to read and free the gridnodes returned
 # by gridgen_generategrid2. Drop them once gridutils ships a DLL.
-# Keep this list in sync with the exports checked in test_windows.py.
+# Keep this list in sync with the exports checked in test_library.py.
 file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/gridgen.def"
     "EXPORTS\n"
     "gridgen_setverbose\n"

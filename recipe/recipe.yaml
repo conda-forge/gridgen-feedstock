@@ -59,12 +59,10 @@ tests:
             - lib/libgridgen.so
   - script:
       - gridgen -h
-  - if: win
-    then:
-      script: test_windows.py
-      requirements:
-        run:
-          - python
+  - script: test_library.py
+    requirements:
+      run:
+        - python
 
 about:
   homepage: https://github.com/sakov/gridgen-c
