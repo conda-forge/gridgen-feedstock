@@ -11,16 +11,24 @@ package:
 source:
   url: https://github.com/sakov/gridgen-c/archive/${{ commit }}.tar.gz
   sha256: d683776613e1f3d614438699f269581ee34f4ed636c2bf612f85c99ee0a2f65b
+  patches:
+    # Triangle casts pointers to unsigned long, which is 32-bit on win-64
+    - patches/use-uintptr_t-for-pointer-arithmetic-in-triangle.patch
 
 build:
-  number: 1001
-  skip: win
+  number: 1002
 
 requirements:
   build:
+    # On Windows this is clang targeting the MSVC ABI, see variants.yaml
     - ${{ compiler('c') }}
     - ${{ stdlib('c') }}
-    - make
+    - if: unix
+      then: make
+    - if: win
+      then:
+        - cmake
+        - ninja
   host:
     - gridutils
   run:
@@ -35,13 +43,26 @@ tests:
         - gridgen
       include:
         - gridgen.h
+        - if: win
+          then: gridgen_config.h
+      lib:
+        - if: win
+          then: gridgen
       # upstream's makefile installs libgridgen.so on all platforms (not
       # .dylib on macOS), so use literal paths instead of `lib: [gridgen]`
       files:
-        - lib/libgridgen.a
-        - lib/libgridgen.so
+        - if: unix
+          then:
+            - lib/libgridgen.a
+            - lib/libgridgen.so
   - script:
       - gridgen -h
+  - if: win
+    then:
+      script: test_windows.py
+      requirements:
+        run:
+          - python
 
 about:
   homepage: https://github.com/sakov/gridgen-c

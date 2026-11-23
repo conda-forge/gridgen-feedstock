@@ -1,0 +1,11 @@
+# Upstream does arithmetic on C99 _Complex double, which MSVC's cl does not
+# support, so build with clang targeting the MSVC ABI. This stays
+# link-compatible with the MSVC-built gridutils (gu.lib).
+c_compiler:
+  - if: win
+    then: clang
+# conda-forge-pinning sets no clang version for Windows, so bump this by hand
+# to follow the clang version pinned for the other platforms.
+c_compiler_version:
+  - if: win
+    then: "23"
