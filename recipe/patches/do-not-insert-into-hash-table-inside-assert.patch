@@ -1,0 +1,49 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Matthew Feickert <matthew.feickert@cern.ch>
+Date: Mon, 23 Nov 2026 15:09:09 -0700
+Subject: [PATCH] Do not insert into the hash table inside assert
+
+map_quadrilaterals inserts each internal edge of the triangulation into
+the e2q hash table inside an assert, which also checks that the key is
+unique:
+
+    assert(ht_insert(e2q, &key, q) == NULL);
+
+When NDEBUG is defined, assert expands to nothing, so the edges are
+never inserted. The later ht_find then returns NULL and q1->id
+dereferences it, crashing for every boundary whose triangulation has
+more than one quadrilateral. conda-forge builds on Windows with
+-DNDEBUG in CFLAGS, while upstream's makefile does not define it.
+
+Call ht_insert unconditionally and only assert on its result. No other
+assert in gridgen's sources has a side effect.
+---
+ gridgen/gridgen.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/gridgen/gridgen.c b/gridgen/gridgen.c
+index 163a451..2e6b0e7 100644
+--- a/gridgen/gridgen.c
++++ b/gridgen/gridgen.c
+@@ -2159,6 +2159,7 @@ static void map_quadrilaterals(gridgen* gg)
+     for (i = 0; i < nq; ++i) {
+         quadrilateral* q = &gg->quadrilaterals[i];
+         int key[2];
++        void* existing;
+ 
+         if (q->vids[0] < q->vids[2]) {
+             key[0] = q->vids[0];
+@@ -2171,7 +2172,9 @@ static void map_quadrilaterals(gridgen* gg)
+         /*
+          * make sure that the edge generates a unique key
+          */
+-        assert(ht_insert(e2q, &key, q) == NULL);
++        existing = ht_insert(e2q, &key, q);
++        assert(existing == NULL);
++        (void) existing;
+     }
+ 
+     /*
+-- 
+2.56.1
+

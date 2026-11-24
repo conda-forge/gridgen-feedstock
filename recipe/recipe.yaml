@@ -14,9 +14,11 @@ source:
   patches:
     # Triangle casts pointers to unsigned long, which is 32-bit on win-64
     - patches/use-uintptr_t-for-pointer-arithmetic-in-triangle.patch
+    # map_quadrilaterals calls ht_insert inside assert, which -DNDEBUG removes
+    - patches/do-not-insert-into-hash-table-inside-assert.patch
 
 build:
-  number: 1002
+  number: 1003
 
 requirements:
   build:
@@ -57,12 +59,10 @@ tests:
             - lib/libgridgen.so
   - script:
       - gridgen -h
-  - if: win
-    then:
-      script: test_windows.py
-      requirements:
-        run:
-          - python
+  - script: test_library.py
+    requirements:
+      run:
+        - python
 
 about:
   homepage: https://github.com/sakov/gridgen-c
@@ -73,3 +73,4 @@ about:
 extra:
   recipe-maintainers:
     - ocefpaf
+    - phobson

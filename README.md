@@ -220,4 +220,5 @@ Feedstock Maintainers
 =====================
 
 * [@ocefpaf](https://github.com/ocefpaf/)
+* [@phobson](https://github.com/phobson/)
 
