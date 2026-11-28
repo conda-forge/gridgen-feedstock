@@ -18,7 +18,7 @@ source:
     - patches/do-not-insert-into-hash-table-inside-assert.patch
 
 build:
-  number: 1003
+  number: 1004
 
 requirements:
   build:
